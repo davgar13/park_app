@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024179909703",
+    "project_id": "parkapp-6b22d",
+    "storage_bucket": "parkapp-6b22d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024179909703:android:e49cc442d874b7e3822d62",
+        "android_client_info": {
+          "package_name": "com.example.park_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx_R9XQZhrFa0r2YcVDwhTmV8BnZPtZ9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
