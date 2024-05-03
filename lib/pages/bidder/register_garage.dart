@@ -36,30 +36,30 @@ class _RegisterPageState extends State<RegisterGaragePage> {
             children: [
               TextField(
                 controller: heightController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Altura',
                   icon: Icon(Icons.height),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: widthController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Ancho',
                   icon: Icon(Icons.square_foot),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: lengthController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Largo',
                   icon: Icon(Icons.straighten),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CheckboxListTile(
-                title: Text("Puerta Automática"),
+                title: const Text("Puerta Automática"),
                 value: selectedGates.contains("automatic"),
                 onChanged: (bool? value) {
                   setState(() {
@@ -72,7 +72,7 @@ class _RegisterPageState extends State<RegisterGaragePage> {
                 },
               ),
               CheckboxListTile(
-                title: Text("Puerta Manual"),
+                title: const Text("Puerta Manual"),
                 value: selectedGates.contains("manual"),
                 onChanged: (bool? value) {
                   setState(() {
@@ -84,31 +84,31 @@ class _RegisterPageState extends State<RegisterGaragePage> {
                   });
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: numbersCarsController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Número de Autos',
                   icon: Icon(Icons.directions_car),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: coordinatesGarageController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Coordenadas del Garaje',
                   icon: Icon(Icons.map),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
-                child: Text("Subir Imagen"),
+                child: const Text("Subir Imagen"),
                 onPressed: () => pickImage(),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _registerGarage,
-                child: Text('Registrar Garaje'),
+                child: const Text('Registrar Garaje'),
               ),
             ],
           ),
