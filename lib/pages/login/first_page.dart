@@ -25,7 +25,7 @@ class _FirstPageState extends State<FirstPage> {
             padingContainer: 20,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: [ 
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
