@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../utils/app_color.dart';
 import '../../widget/card_view.dart';
@@ -98,12 +99,25 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _registerUser() async {
-    FirebaseFirestore.instance.collection('users').add({
-      'name': nameController.text,
-      'surname': surnameController.text,
-      'email': emailController.text,
-      'password': passwordController.text,
-      'role': selectedRole,
-    });
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'name': nameController.text,
+        'surname': surnameController.text,
+        'role': selectedRole,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Usuario registrado con éxito'))
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al registrar usuario: $e'))
+      );
+    }
   }
 }
