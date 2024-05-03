@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: Container(), // El cuerpo sigue vacío
+      body: Container(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Align(
