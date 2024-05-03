@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:park_app/pages/home/home_page.dart';
 
 import '../../utils/app_color.dart';
 import '../../widget/card_view.dart';
@@ -40,6 +41,15 @@ class _LoginPageState extends State<LoginPage> {
                   icon: Icons.lock_rounded, 
                   messageError: 'Ingrese una contraseña válida',
                   keyboardType: TextInputType.visiblePassword,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  },
+                  child: const Text('Iniciar Sesión')
                 ),
             ]
           )
