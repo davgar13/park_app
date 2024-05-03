@@ -4,25 +4,23 @@ import '../../widget/card_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
- 
+
 class RegisterGaragePage extends StatefulWidget {
   const RegisterGaragePage({Key? key}) : super(key: key);
- 
+
   @override
   State<RegisterGaragePage> createState() => _RegisterPageState();
 }
- 
+
 class _RegisterPageState extends State<RegisterGaragePage> {
   final TextEditingController heightController = TextEditingController();
   final TextEditingController widthController = TextEditingController();
   final TextEditingController lengthController = TextEditingController();
   final TextEditingController numbersCarsController = TextEditingController();
-  final TextEditingController coordinatesGarageController =
-      TextEditingController();
+  final TextEditingController coordinatesGarageController = TextEditingController();
   List<String> selectedGates = [];
   XFile? image;
   final picker = ImagePicker();
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,14 +116,14 @@ class _RegisterPageState extends State<RegisterGaragePage> {
       ),
     );
   }
- 
+
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       image = pickedFile;
     });
   }
- 
+
   Future<void> _registerGarage() async {
     String imageUrl = '';
     if (image != null) {
@@ -135,7 +133,7 @@ class _RegisterPageState extends State<RegisterGaragePage> {
       await ref.putData(data);
       imageUrl = await ref.getDownloadURL();
     }
- 
+
     FirebaseFirestore.instance.collection('garage').add({
       'height': double.parse(heightController.text),
       'width': double.parse(widthController.text),
