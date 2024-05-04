@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../utils/app_color.dart';
 import '../../widget/card_view.dart';
@@ -16,6 +18,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  String? selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +62,62 @@ class _RegisterPageState extends State<RegisterPage> {
                 messageError: 'Ingrese una contraseña válida',
                 keyboardType: TextInputType.visiblePassword,
               ),
+              const SizedBox(height: 10,),
+              DropdownButton<String>(
+                value: selectedRole,
+                hint: Text("Seleccione un rol"),
+                icon: Icon(Icons.arrow_drop_down),
+                elevation: 16,
+                style: TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedRole = newValue;
+                  });
+                },
+                items: <String>['Cliente', 'Ofertante']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _registerUser,
+                child: const Text('Guardar')
+              ),
             ]
           )
         ),
       ),
     );
+  }
+
+  Future<void> _registerUser() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'name': nameController.text,
+        'surname': surnameController.text,
+        'role': selectedRole,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Usuario registrado con éxito'))
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al registrar usuario: $e'))
+      );
+    }
   }
 }

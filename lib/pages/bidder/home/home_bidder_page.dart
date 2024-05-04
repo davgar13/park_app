@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:park_app/pages/home/register_car_page.dart';
+import 'package:park_app/pages/client/home/register_car_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeBidderPage extends StatefulWidget {
+  const HomeBidderPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeBidderPage> createState() => _HomeBidderPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeBidderPageState extends State<HomeBidderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: Container(), // El cuerpo sigue vacío
+      body: Container(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Align(
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => const RegisterCarPage()),
                   );
             },
-            child: Text('Añadir auto'),
+            child: Text('Añadir garage'),
             style: ElevatedButton.styleFrom(
               primary: Theme.of(context).colorScheme.secondary,
               onPrimary: Colors.white,
