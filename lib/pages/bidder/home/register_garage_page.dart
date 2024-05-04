@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:park_app/widget/card_view.dart';
@@ -23,6 +23,7 @@ class _RegisterPageState extends State<RegisterGaragePage> {
   final TextEditingController nameGarageController = TextEditingController();
   List<String> selectedGates = [];
   LatLng? coordinatesGarage;
+  Marker? marker;
   XFile? image;
   final picker = ImagePicker();
   GoogleMapController? mapController;
@@ -82,6 +83,15 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         ),
       ),
       SizedBox(height: 10),
+      TextField(
+        controller: TextEditingController(text: coordinatesGarage?.toString()),
+        decoration: InputDecoration(
+          labelText: 'Coordenadas del Garaje',
+          icon: Icon(Icons.map),
+        ),
+        readOnly: true,
+      ),
+      SizedBox(height: 10),
       CheckboxListTile(
         title: Text("Puerta Automática"),
         value: selectedGates.contains("automatic"),
@@ -117,6 +127,13 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         ),
       ),
       SizedBox(height: 10),
+      TextField(
+        controller: priceController,
+        decoration: InputDecoration(
+          labelText: 'Precio',
+          icon: Icon(Icons.money),
+        ),
+      ),
     ];
   }
 
@@ -125,14 +142,6 @@ class _RegisterPageState extends State<RegisterGaragePage> {
       ElevatedButton(
         onPressed: () => _selectCoordinates(context),
         child: Text('Seleccionar Coordenadas'),
-      ),
-      SizedBox(height: 10),
-      TextField(
-        controller: priceController,
-        decoration: InputDecoration(
-          labelText: 'Precio',
-          icon: Icon(Icons.money),
-        ),
       ),
       SizedBox(height: 10),
       ElevatedButton(
@@ -170,10 +179,14 @@ class _RegisterPageState extends State<RegisterGaragePage> {
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
               },
+              markers: marker != null ? {marker!} : {},
               onTap: (LatLng location) {
                 setState(() {
                   coordinatesGarage = location;
-                  Navigator.of(context).pop();
+                  marker = Marker(
+                    markerId: MarkerId("selected"),
+                    position: location,
+                  );
                 });
               },
             ),
@@ -215,16 +228,6 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         'coordinates_garage': coordinatesGarage?.toString() ?? '',
         'price_garage': priceController.text,
       });
-
-      nameGarageController.clear();
-      heightController.clear();
-      widthController.clear();
-      lengthController.clear();
-      numbersCarsController.clear();
-      priceController.clear();
-      selectedGates.clear();
-      coordinatesGarage = null;
-      image = null;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Garage registered successfully!')),
