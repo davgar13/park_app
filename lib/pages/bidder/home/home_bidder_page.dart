@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:park_app/pages/client/home/register_car_page.dart';
+import 'package:park_app/pages/bidder/home/list_garage_page.dart';
+import 'package:park_app/pages/bidder/home/register_garage_page.dart';
 
 class HomeBidderPage extends StatefulWidget {
   const HomeBidderPage({super.key});
@@ -23,9 +25,10 @@ class _HomeBidderPageState extends State<HomeBidderPage> {
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RegisterCarPage()),
-                  );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const RegisterGaragePage()),
+              );
             },
             child: Text('Añadir garage'),
             style: ElevatedButton.styleFrom(
@@ -38,4 +41,3 @@ class _HomeBidderPageState extends State<HomeBidderPage> {
     );
   }
 }
-

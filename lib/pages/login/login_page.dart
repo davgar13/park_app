@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:park_app/pages/client/home/home_page.dart';
-import 'package:park_app/pages/bidder/home/home_bidder_page.dart'; // Asumiendo que esta es la importación correcta
+import 'package:park_app/pages/bidder/home/home_bidder_page.dart'; 
 import '../../utils/app_color.dart';
 import '../../widget/card_view.dart';
 import '../../widget/forms/form_login.dart';
@@ -76,11 +76,9 @@ class _LoginPageState extends State<LoginPage> {
         password: password,
       );
 
-      // Retrieve role from Firestore
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).get();
       String role = userDoc.get('role');
 
-      // Navigate based on role
       if (role == 'Cliente') {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
       } else if (role == 'Ofertante') {
