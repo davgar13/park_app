@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:park_app/pages/client/home/register_car_page.dart';
+import 'package:park_app/pages/client/register_car_page.dart';
 
 class HomeBidderPage extends StatefulWidget {
   const HomeBidderPage({super.key});
@@ -29,8 +29,7 @@ class _HomeBidderPageState extends State<HomeBidderPage> {
             },
             child: Text('Añadir garage'),
             style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).colorScheme.secondary,
-              onPrimary: Colors.white,
+              foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ),

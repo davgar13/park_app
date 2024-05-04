@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:park_app/pages/client/home/register_car_page.dart';
+import 'package:park_app/pages/client/register_car_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,8 +29,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: Text('Añadir auto'),
             style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).colorScheme.secondary,
-              onPrimary: Colors.white,
+              foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ),
