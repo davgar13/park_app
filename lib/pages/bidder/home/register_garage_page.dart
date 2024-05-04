@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../utils/app_color.dart';
-import '../../widget/card_view.dart';
+import 'package:park_app/widget/card_view.dart';
+import 'package:park_app/utils/app_color.dart';
 
 class RegisterGaragePage extends StatefulWidget {
   const RegisterGaragePage({Key? key}) : super(key: key);
@@ -20,10 +20,13 @@ class _RegisterPageState extends State<RegisterGaragePage> {
   final TextEditingController lengthController = TextEditingController();
   final TextEditingController numbersCarsController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
+  final TextEditingController nameGarageController = TextEditingController();
   List<String> selectedGates = [];
   LatLng? coordinatesGarage;
+  Marker? marker;
   XFile? image;
   final picker = ImagePicker();
+  GoogleMapController? mapController;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,8 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         child: Center(
           child: CardView(
             marginCard: 20,
-            paddingContainer: 20,
-            elevation: 8,
+            padingContainer: 20,
+            elevtion: 8,
             borderRadius: 15,
             color: AppColor.green,
             child: Column(
@@ -48,6 +51,14 @@ class _RegisterPageState extends State<RegisterGaragePage> {
 
   List<Widget> buildInputs() {
     return [
+      TextField(
+        controller: nameGarageController,
+        decoration: InputDecoration(
+          labelText: 'Nombre del Garaje',
+          icon: Icon(Icons.drive_eta),
+        ),
+      ),
+      SizedBox(height: 10),
       TextField(
         controller: heightController,
         decoration: InputDecoration(
@@ -70,6 +81,15 @@ class _RegisterPageState extends State<RegisterGaragePage> {
           labelText: 'Largo',
           icon: Icon(Icons.straighten),
         ),
+      ),
+      SizedBox(height: 10),
+      TextField(
+        controller: TextEditingController(text: coordinatesGarage?.toString()),
+        decoration: InputDecoration(
+          labelText: 'Coordenadas del Garaje',
+          icon: Icon(Icons.map),
+        ),
+        readOnly: true,
       ),
       SizedBox(height: 10),
       CheckboxListTile(
@@ -107,6 +127,13 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         ),
       ),
       SizedBox(height: 10),
+      TextField(
+        controller: priceController,
+        decoration: InputDecoration(
+          labelText: 'Precio',
+          icon: Icon(Icons.money),
+        ),
+      ),
     ];
   }
 
@@ -115,14 +142,6 @@ class _RegisterPageState extends State<RegisterGaragePage> {
       ElevatedButton(
         onPressed: () => _selectCoordinates(context),
         child: Text('Seleccionar Coordenadas'),
-      ),
-      SizedBox(height: 10),
-      TextField(
-        controller: priceController,
-        decoration: InputDecoration(
-          labelText: 'Precio',
-          icon: Icon(Icons.money),
-        ),
       ),
       SizedBox(height: 10),
       ElevatedButton(
@@ -135,7 +154,6 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         child: Text('Registrar Garaje'),
       ),
     ];
-
   }
 
   Future<void> pickImage() async {
@@ -143,6 +161,39 @@ class _RegisterPageState extends State<RegisterGaragePage> {
     setState(() {
       image = pickedFile;
     });
+  }
+
+  Future<void> _selectCoordinates(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            height: 400,
+            width: 300,
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(-17.7224164393445, -63.175013515343366),
+                zoom: 14,
+              ),
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+              },
+              markers: marker != null ? {marker!} : {},
+              onTap: (LatLng location) {
+                setState(() {
+                  coordinatesGarage = location;
+                  marker = Marker(
+                    markerId: MarkerId("selected"),
+                    position: location,
+                  );
+                });
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _registerGarage() async {
@@ -166,6 +217,7 @@ class _RegisterPageState extends State<RegisterGaragePage> {
     try {
       await FirebaseFirestore.instance.collection('garages').add({
         'ownerId': user.uid,
+        'name_garage': nameGarageController.text,
         'height': double.parse(heightController.text),
         'width': double.parse(widthController.text),
         'length': double.parse(lengthController.text),
@@ -177,22 +229,20 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         'price_garage': priceController.text,
       });
 
+      nameGarageController.clear();
       heightController.clear();
       widthController.clear();
       lengthController.clear();
       numbersCarsController.clear();
       priceController.clear();
-      selectedGates.clear();
-      coordinatesGarage = null;
-      image = null;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Garage registered successfully!')),
+        SnackBar(content: Text('¡Garaje registrado exitosamente!')),
       );
     } catch (error) {
-      print("Error registering garage: $error");
+      print("Error registrando el garaje: $error");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error registering the garage')),
+        SnackBar(content: Text('Error registrando el garaje')),
       );
     }
   }
