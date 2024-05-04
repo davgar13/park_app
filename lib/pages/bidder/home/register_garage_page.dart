@@ -229,13 +229,20 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         'price_garage': priceController.text,
       });
 
+      nameGarageController.clear();
+      heightController.clear();
+      widthController.clear();
+      lengthController.clear();
+      numbersCarsController.clear();
+      priceController.clear();
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Garage registered successfully!')),
+        SnackBar(content: Text('¡Garaje registrado exitosamente!')),
       );
     } catch (error) {
-      print("Error registering garage: $error");
+      print("Error registrando el garaje: $error");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error registering the garage')),
+        SnackBar(content: Text('Error registrando el garaje')),
       );
     }
   }
