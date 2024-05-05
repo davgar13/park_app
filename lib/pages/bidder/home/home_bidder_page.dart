@@ -26,7 +26,8 @@ class _HomeBidderPageState extends State<HomeBidderPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const RegisterGaragePage()),
+                MaterialPageRoute(
+                    builder: (context) => const RegisterGaragePage()),
               );
             },
             child: Text('Añadir garage'),

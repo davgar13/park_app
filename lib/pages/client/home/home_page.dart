@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:park_app/utils/app_color.dart';
+import 'package:park_app/pages/reservations/reservation_garage_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -63,50 +64,59 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showGarageDetails(Map<String, dynamic> garage) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(garage['name_garage'] ?? 'Sin nombre'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(
-                garage['image_garage'] ?? '',
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
-              Text('Coordinates: ${garage['coordinates_garage'] ?? 'N/A'}'),
-              Text('Number of Cars: ${garage['numbers_Cars'] ?? 'N/A'}'),
-              Text('Price: ${garage['price_garage'] ?? 'N/A'}'),
-              Text('Status: ${garage['status_garage'] ?? 'N/A'}'),
-              Text('Type of Gate: ${garage['type_gate'] ?? 'N/A'}'),
-              Text('Height: ${garage['height'] ?? 'N/A'}'),
-              Text('Width: ${garage['width'] ?? 'N/A'}'),
-              Text('Length: ${garage['length'] ?? 'N/A'}'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Aquí puedes implementar la lógica para reservar el garaje
-                Navigator.of(context).pop();
-              },
-              child: Text('Reservar'),
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(garage['name_garage'] ?? 'Sin nombre'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              garage['image_garage'] ?? '',
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cerrar'),
-            ),
+            Text('Coordinates: ${garage['coordinates_garage'] ?? 'N/A'}'),
+            Text('Number of Cars: ${garage['numbers_Cars'] ?? 'N/A'}'),
+            Text('Price: ${garage['price_garage'] ?? 'N/A'}'),
+            Text('Status: ${garage['status_garage'] ?? 'N/A'}'),
+            Text('Type of Gate: ${garage['type_gate'] ?? 'N/A'}'),
+            Text('Height: ${garage['height'] ?? 'N/A'}'),
+            Text('Width: ${garage['width'] ?? 'N/A'}'),
+            Text('Length: ${garage['length'] ?? 'N/A'}'),
           ],
-        );
-      },
-    );
-  }
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); 
+              Navigator.push( 
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReservationGarage(
+                    name: garage['name_garage'] ?? 'Sin nombre',
+                    price: garage['price_garage'] ?? 'N/A',
+                  ),
+                ),
+              );
+            },
+            child: Text('Reservar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cerrar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
