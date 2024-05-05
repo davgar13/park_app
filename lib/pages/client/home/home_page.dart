@@ -32,8 +32,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _markers.clear();
           for (var document in snapshot.docs) {
-            Map<String, dynamic> garage =
-                document.data() as Map<String, dynamic>;
+            Map<String, dynamic> garage = document.data() as Map<String, dynamic>;
             print("Garage data: $garage");
             if (garage['coordinates_garage'] != null) {
               String coordsString = garage['coordinates_garage'];
@@ -51,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                     title: garage['name_garage'] ?? 'Sin nombre',
                     snippet: 'Precio: ${garage['price_garage'] ?? 'N/A'}',
                     onTap: () {
-                      _showGarageDetails(garage);
+                      _showGarageDetails(garage, document.id);
                     },
                   ),
                 ));
@@ -63,60 +62,60 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showGarageDetails(Map<String, dynamic> garage) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text(garage['name_garage'] ?? 'Sin nombre'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              garage['image_garage'] ?? '',
-              height: 100,
-              width: 100,
-              fit: BoxFit.cover,
-            ),
-            Text('Coordinates: ${garage['coordinates_garage'] ?? 'N/A'}'),
-            Text('Number of Cars: ${garage['numbers_Cars'] ?? 'N/A'}'),
-            Text('Price: ${garage['price_garage'] ?? 'N/A'}'),
-            Text('Status: ${garage['status_garage'] ?? 'N/A'}'),
-            Text('Type of Gate: ${garage['type_gate'] ?? 'N/A'}'),
-            Text('Height: ${garage['height'] ?? 'N/A'}'),
-            Text('Width: ${garage['width'] ?? 'N/A'}'),
-            Text('Length: ${garage['length'] ?? 'N/A'}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); 
-              Navigator.push( 
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReservationGarage(
-                    name: garage['name_garage'] ?? 'Sin nombre',
-                    price: garage['price_garage'] ?? 'N/A',
+  void _showGarageDetails(Map<String, dynamic> garage, String garageId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(garage['name_garage'] ?? 'Sin nombre'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(
+                garage['image_garage'] ?? '',
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
+              ),
+              Text('Coordinates: ${garage['coordinates_garage'] ?? 'N/A'}'),
+              Text('Number of Cars: ${garage['numbers_Cars'] ?? 'N/A'}'),
+              Text('Price: ${garage['price_garage'] ?? 'N/A'}'),
+              Text('Status: ${garage['status_garage'] ?? 'N/A'}'),
+              Text('Type of Gate: ${garage['type_gate'] ?? 'N/A'}'),
+              Text('Height: ${garage['height'] ?? 'N/A'}'),
+              Text('Width: ${garage['width'] ?? 'N/A'}'),
+              Text('Length: ${garage['length'] ?? 'N/A'}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReservationGarage(
+                      name: garage['name_garage'] ?? 'Sin nombre',
+                      price: garage['price_garage'] ?? 'N/A',
+                      garageId: garageId,  
+                    ),
                   ),
-                ),
-              );
-            },
-            child: Text('Reservar'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cerrar'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+                );
+              },
+              child: Text('Reservar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cerrar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
