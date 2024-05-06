@@ -70,12 +70,15 @@ class _ReservationPageState extends State<ReservationGarage> {
             'height': doc.data()?['height'] as double,
           };
         });
-        _findCompatibleCars();
+
+        String ownerId = doc.data()?['ownerId'] as String;
+
+        _findCompatibleCars(ownerId);
       }
     });
   }
 
-  void _findCompatibleCars() {
+  void _findCompatibleCars(String ownerId) {
     FirebaseFirestore.instance
         .collection('user_cars')
         .where('width', isLessThanOrEqualTo: garageDimensions?['width'])
