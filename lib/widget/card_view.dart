@@ -14,7 +14,7 @@ class CardView extends StatelessWidget {
     required this.child,
     required this.marginCard,
     required this.padingContainer,
-    super.key
+    super.key, required int paddingContainer, required int elevation
   });
 
   @override

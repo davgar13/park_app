@@ -42,23 +42,28 @@ class _GarageListPageState extends State<GarageListPage> {
             return Center(child: CircularProgressIndicator());
           }
 
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>? ?? {};
-              return ListTile(
-                title: Text(data['name_garage'] ?? 'Nombre no disponible'),
-                subtitle: Text('Precio: ${data['price_garage'] ?? 'No disponible'}'),
-                trailing: Icon(Icons.arrow_forward),
-                onTap: () => showGarageDetails(context, data),
-              );
-            }).toList(),
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              Map<String, dynamic> data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+              return _buildGarageItem(context, data);
+            },
           );
         },
       ),
     );
   }
 
-  void showGarageDetails(BuildContext context, Map<String, dynamic> data) {
+  Widget _buildGarageItem(BuildContext context, Map<String, dynamic> data) {
+    return ListTile(
+      title: Text(data['name_garage'] ?? 'Nombre no disponible'),
+      subtitle: Text('Precio: ${data['price_garage'] ?? 'No disponible'}'),
+      trailing: Icon(Icons.arrow_forward),
+      onTap: () => _showGarageDetails(context, data),
+    );
+  }
+
+  void _showGarageDetails(BuildContext context, Map<String, dynamic> data) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -69,7 +74,7 @@ class _GarageListPageState extends State<GarageListPage> {
               children: <Widget>[
                 data['image_garage'] != null
                   ? Image.network(data['image_garage'], fit: BoxFit.cover)
-                  : Text('No image available'),
+                  : Text('No hay imagen disponible'),
                 Text('Coordenadas: ${data['coordinates_garage'] ?? 'No disponible'}'),
                 Text('Número de Autos: ${data['numbers_cars'] ?? 'No disponible'}'),
                 Text('Precio: ${data['price_garage'] ?? 'No disponible'}'),
@@ -93,4 +98,10 @@ class _GarageListPageState extends State<GarageListPage> {
       },
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: GarageListPage(),
+  ));
 }

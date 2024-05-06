@@ -10,7 +10,7 @@ import '../../../widget/card_view.dart';
 import '../../../widget/forms/form_login.dart';
 
 class RegisterCarPage extends StatefulWidget {
-  const RegisterCarPage({super.key});
+  const RegisterCarPage({Key? key});
 
   @override
   State<RegisterCarPage> createState() => _RegisterCarPageState();
@@ -29,17 +29,49 @@ class _RegisterCarPageState extends State<RegisterCarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: Text(
+          'Registro de Auto',
+          style: TextStyle(color: Colors.white), // Cambiar color del texto a blanco
+        ),
+        backgroundColor: AppColor.primary,
+        iconTheme: IconThemeData(color: Colors.white), // Cambiar color del icono a blanco
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+
+
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: CardView(
+          paddingContainer: 20,
           marginCard: 20,
           padingContainer: 20,
+          elevation: 8,
           elevtion: 8,
           borderRadius: 15,
-          color: AppColor.green,
+          color: Colors.brown[50]!,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: buildInputs() + buildButtons(),
+              children: [
+                SizedBox(height: 20),
+                Text(
+                  'Registro de Auto',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColor.primary),
+                ),
+                SizedBox(height: 20),
+                ...buildInputs(),
+                SizedBox(height: 20),
+                buildImageButton(),
+                SizedBox(height: 20),
+                buildRegisterButton(),
+                SizedBox(height: 20),
+              ],
             ),
           ),
         ),
@@ -62,6 +94,7 @@ class _RegisterCarPageState extends State<RegisterCarPage> {
         icon: Icons.car_rental,
         messageError: 'Ingrese un modelo válido',
       ),
+      const SizedBox(height: 10),
       FormLogin(
         formController: licensePlateController,
         labelText: 'Placa',
@@ -76,6 +109,7 @@ class _RegisterCarPageState extends State<RegisterCarPage> {
         messageError: 'Ingrese una altura válida',
         keyboardType: TextInputType.number,
       ),
+      const SizedBox(height: 10),
       FormLogin(
         formController: widthController,
         labelText: 'Ancho',
@@ -94,18 +128,20 @@ class _RegisterCarPageState extends State<RegisterCarPage> {
     ];
   }
 
-  List<Widget> buildButtons() {
-    return [
-      ElevatedButton(
-        onPressed: () => pickImage(),
-        child: Text('Seleccionar Imagen del Auto'),
-      ),
-      SizedBox(height: 20),
-      ElevatedButton(
-        onPressed: _registerCar,
-        child: Text('Registrar Auto'),
-      ),
-    ];
+  Widget buildImageButton() {
+    return ElevatedButton(
+      onPressed: pickImage,
+      child: Text('Seleccionar Imagen del Auto'),
+      style: ElevatedButton.styleFrom(backgroundColor: AppColor.green),
+    );
+  }
+
+  Widget buildRegisterButton() {
+    return ElevatedButton(
+      onPressed: _registerCar,
+      child: Text('Registrar Auto'),
+      style: ElevatedButton.styleFrom(backgroundColor: AppColor.green),
+    );
   }
 
   Future<void> pickImage() async {
@@ -119,7 +155,7 @@ class _RegisterCarPageState extends State<RegisterCarPage> {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No user logged in. Please login first.')),
+        SnackBar(content: Text('No hay usuario registrado. Por favor inicie sesión primero.')),
       );
       return;
     }
@@ -152,11 +188,11 @@ class _RegisterCarPageState extends State<RegisterCarPage> {
       lengthController.clear();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Car registered successfully!')),
+        SnackBar(content: Text('¡Auto registrado exitosamente!')),
       );
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error registering the car: $error')),
+        SnackBar(content: Text('Error al registrar el auto: $error')),
       );
     });
   }

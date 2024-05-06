@@ -14,7 +14,7 @@ class RegisterGaragePage extends StatefulWidget {
   State<RegisterGaragePage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterGaragePage> {
+class _RegisterPageState extends State<RegisterGaragePage> with SingleTickerProviderStateMixin {
   final TextEditingController heightController = TextEditingController();
   final TextEditingController widthController = TextEditingController();
   final TextEditingController lengthController = TextEditingController();
@@ -31,17 +31,48 @@ class _RegisterPageState extends State<RegisterGaragePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Registro del Garaje',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColor.primary,
+        iconTheme: IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: CardView(
             marginCard: 20,
+            paddingContainer: 20,
             padingContainer: 20,
+            elevation: 8,
             elevtion: 8,
             borderRadius: 15,
-            color: AppColor.green,
+            color: AppColor.primary,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: buildInputs() + buildButtons(),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Text(
+                    "Registro del Garaje",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ...buildInputs(),
+                ...buildButtons(),
+              ],
             ),
           ),
         ),
@@ -55,85 +86,62 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         controller: nameGarageController,
         decoration: InputDecoration(
           labelText: 'Nombre del Garaje',
-          icon: Icon(Icons.drive_eta),
+          icon: Icon(Icons.drive_eta, color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
         ),
+        style: TextStyle(color: Colors.white),
       ),
       SizedBox(height: 10),
       TextField(
         controller: heightController,
         decoration: InputDecoration(
           labelText: 'Altura',
-          icon: Icon(Icons.height),
+          icon: Icon(Icons.height, color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
         ),
+        style: TextStyle(color: Colors.white),
       ),
       SizedBox(height: 10),
       TextField(
         controller: widthController,
         decoration: InputDecoration(
           labelText: 'Ancho',
-          icon: Icon(Icons.square_foot),
+          icon: Icon(Icons.square_foot, color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
         ),
+        style: TextStyle(color: Colors.white),
       ),
       SizedBox(height: 10),
       TextField(
         controller: lengthController,
         decoration: InputDecoration(
           labelText: 'Largo',
-          icon: Icon(Icons.straighten),
+          icon: Icon(Icons.straighten, color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
         ),
-      ),
-      SizedBox(height: 10),
-      TextField(
-        controller: TextEditingController(text: coordinatesGarage?.toString()),
-        decoration: InputDecoration(
-          labelText: 'Coordenadas del Garaje',
-          icon: Icon(Icons.map),
-        ),
-        readOnly: true,
-      ),
-      SizedBox(height: 10),
-      CheckboxListTile(
-        title: Text("Puerta Automática"),
-        value: selectedGates.contains("automatic"),
-        onChanged: (bool? value) {
-          setState(() {
-            if (value == true) {
-              selectedGates.add("automatic");
-            } else {
-              selectedGates.remove("automatic");
-            }
-          });
-        },
-      ),
-      CheckboxListTile(
-        title: Text("Puerta Manual"),
-        value: selectedGates.contains("manual"),
-        onChanged: (bool? value) {
-          setState(() {
-            if (value == true) {
-              selectedGates.add("manual");
-            } else {
-              selectedGates.remove("manual");
-            }
-          });
-        },
+        style: TextStyle(color: Colors.white),
       ),
       SizedBox(height: 10),
       TextField(
         controller: numbersCarsController,
         decoration: InputDecoration(
           labelText: 'Número de Autos',
-          icon: Icon(Icons.directions_car),
+          icon: Icon(Icons.directions_car, color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
         ),
+        style: TextStyle(color: Colors.white),
       ),
       SizedBox(height: 10),
       TextField(
         controller: priceController,
         decoration: InputDecoration(
           labelText: 'Precio',
-          icon: Icon(Icons.money),
+          icon: Icon(Icons.money, color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
         ),
+        style: TextStyle(color: Colors.white),
       ),
+      SizedBox(height: 20),
     ];
   }
 
@@ -142,16 +150,25 @@ class _RegisterPageState extends State<RegisterGaragePage> {
       ElevatedButton(
         onPressed: () => _selectCoordinates(context),
         child: Text('Seleccionar Coordenadas'),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white, backgroundColor: AppColor.secondary,
+        ),
       ),
       SizedBox(height: 10),
       ElevatedButton(
         child: Text("Subir Imagen"),
         onPressed: () => pickImage(),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white, backgroundColor: AppColor.secondary,
+        ),
       ),
       SizedBox(height: 20),
       ElevatedButton(
         onPressed: _registerGarage,
         child: Text('Registrar Garaje'),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white, backgroundColor: AppColor.secondary,
+        ),
       ),
     ];
   }
@@ -200,7 +217,7 @@ class _RegisterPageState extends State<RegisterGaragePage> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No user logged in')),
+        SnackBar(content: Text('No hay usuario registrado')),
       );
       return;
     }

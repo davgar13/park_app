@@ -34,9 +34,11 @@ class _FirstPageState extends State<FirstPage> {
                 child: CardView(
                   marginCard: 20,
                   elevtion: 8, 
+                  elevation: 8, 
                   borderRadius: 15, 
                   color: AppColor.primary, 
                   padingContainer: 20,
+                  paddingContainer: 20,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [ 
