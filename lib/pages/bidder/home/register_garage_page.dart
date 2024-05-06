@@ -223,8 +223,8 @@ class _RegisterPageState extends State<RegisterGaragePage> {
         'length': double.parse(lengthController.text),
         'type_gate': selectedGates,
         'numbers_cars': int.parse(numbersCarsController.text),
-        'status_garage': 'Libre',
         'image_garage': imageUrl,
+        'status_garage': 'Libre',
         'coordinates_garage': coordinatesGarage?.toString() ?? '',
         'price_garage': priceController.text,
       });

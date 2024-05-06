@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:park_app/utils/app_color.dart';
+import 'package:park_app/pages/reservations/reservation_garage_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,8 +32,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _markers.clear();
           for (var document in snapshot.docs) {
-            Map<String, dynamic> garage =
-                document.data() as Map<String, dynamic>;
+            Map<String, dynamic> garage = document.data() as Map<String, dynamic>;
             print("Garage data: $garage");
             if (garage['coordinates_garage'] != null) {
               String coordsString = garage['coordinates_garage'];
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                     title: garage['name_garage'] ?? 'Sin nombre',
                     snippet: 'Precio: ${garage['price_garage'] ?? 'N/A'}',
                     onTap: () {
-                      _showGarageDetails(garage);
+                      _showGarageDetails(garage, document.id);
                     },
                   ),
                 ));
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showGarageDetails(Map<String, dynamic> garage) {
+  void _showGarageDetails(Map<String, dynamic> garage, String garageId) {
     showDialog(
       context: context,
       builder: (context) {
@@ -91,8 +91,17 @@ class _HomePageState extends State<HomePage> {
           actions: [
             TextButton(
               onPressed: () {
-                // Aquí puedes implementar la lógica para reservar el garaje
                 Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReservationGarage(
+                      name: garage['name_garage'] ?? 'Sin nombre',
+                      price: garage['price_garage'] ?? 'N/A',
+                      garageId: garageId,  
+                    ),
+                  ),
+                );
               },
               child: Text('Reservar'),
             ),
